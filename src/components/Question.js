@@ -1,32 +1,83 @@
-import React, { useState } from "react";
+// import React, { useEffect } from "react";
+
+// function Question({ question, timeRemaining, setTimeRemaining, onAnswered }) {
+//   // const [timeRemaining, setTimeRemaining] = useState(10);
+
+//   // add useEffect 
+//   useEffect(() => {
+//   // Only run the timer if timeRemaining > 0
+//   if (timeRemaining > 0) {
+//     const timeoutId = setTimeout(() => {
+//       setTimeRemaining(timeRemaining - 1);
+//     }, 1000);
+
+//     // Cleanup function to clear timeout
+//     return () => clearTimeout(timeoutId);
+//   } else {
+//     // Time's up!
+//     setTimeRemaining(10);         // Reset timer for next question
+//     onAnswered(false);            // Trigger parent callback
+//   }
+// }, [timeRemaining, setTimeRemaining, onAnswered]);
+
+
+//   function handleAnswer(isCorrect) {
+//     setTimeRemaining(10);
+//     onAnswered(isCorrect);
+//   }
+
+//   const { id, prompt, answers, correctIndex } = question;
+
+//   return (
+//     <>
+//       <h1>Question {id}</h1>
+//       <h3>{prompt}</h3>
+//       {answers.map((answer, index) => {
+//         const isCorrect = index === correctIndex;
+//         return (
+//           <button key={answer} onClick={() => handleAnswer(isCorrect)}>
+//             {answer}
+//           </button>
+//         );
+//       })}
+//       <h5>{timeRemaining} seconds remaining</h5>
+//     </>
+//   );
+// }
+
+// export default Question;
+
+
+import React, { useState, useEffect } from "react";
 
 function Question({ question, onAnswered }) {
   const [timeRemaining, setTimeRemaining] = useState(10);
 
-  // add useEffect code
+  useEffect(() => {
+    if (timeRemaining > 0) {
+      const timeoutId = setTimeout(() => {
+        setTimeRemaining(timeRemaining - 1);
+      }, 1000);
 
-  function handleAnswer(isCorrect) {
-    setTimeRemaining(10);
-    onAnswered(isCorrect);
-  }
-
-  const { id, prompt, answers, correctIndex } = question;
+      return () => clearTimeout(timeoutId);
+    } else {
+      setTimeRemaining(10);
+      onAnswered(false);
+    }
+  }, [timeRemaining, onAnswered]);
 
   return (
-    <>
-      <h1>Question {id}</h1>
-      <h3>{prompt}</h3>
-      {answers.map((answer, index) => {
-        const isCorrect = index === correctIndex;
-        return (
-          <button key={answer} onClick={() => handleAnswer(isCorrect)}>
-            {answer}
-          </button>
-        );
-      })}
-      <h5>{timeRemaining} seconds remaining</h5>
-    </>
+    <div>
+      <h1>{question.prompt}</h1>
+      <ul>
+        {question.answers.map((answer, index) => (
+          <li key={index}>{answer}</li>
+        ))}
+      </ul>
+      <p>{timeRemaining} seconds remaining</p>
+    </div>
   );
 }
 
 export default Question;
+
